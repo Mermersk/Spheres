@@ -24,7 +24,7 @@ void main() {
 	float d = length(pointUV);
 	float light = 0.09 / (d);
 	light = step(0.2, light) * light;
-	if (light < 0.2) {
+	if (light < 0.3) {
 		discard;
 	}
 	vertPosCol = vec3(light);
