@@ -108,13 +108,22 @@ Promise.all([vertexShaderPromise, fragmentShaderPromise]).then((shadersText) => 
         const timeInSeconds = time * 0.001;
         const scalingMatrix = m4.scaling([1, 1, 1])
         const rotationMatrix = m4.rotationZ(0.001)
+        const rotationMatrixB = m4.rotationY(0.002)
         const rotMatrixY = m4.rotationY(0.015)
         const translationMatrix = m4.translation([0, 0, 0])
         //m4.multiply(modelMatrix, translationMatrix, modelMatrix)
         m4.multiply(modelMatrix, rotationMatrix, modelMatrix)
+        m4.multiply(modelMatrix, rotationMatrixB, modelMatrix)
+
         //m4.multiply(modelMatrix, rotMatrixY, modelMatrix)
         //m4.multiply(modelMatrix, scalingMatrix, modelMatrix)
-      
+        const a = Math.cos(timeInSeconds) / 2.0
+        const b = Math.sin(timeInSeconds) / 2.0
+        let viewMatrix = m4.lookAt( [a+b, a, b + 4], //// Camera is at (4,3,3), in World Space
+                                    [0, 0, 0], // and looks at the origin
+                                    [0, 1, 0]) // Head is up (set to 0,-1,0 to look upside-down)
+        m4.inverse(viewMatrix, viewMatrix) //OBS: in the tutorial I am following I have to use inverse of result matrix that twgl.lookAt produces 
+        uniforms.u_view = viewMatrix;
 
         gl.useProgram(programInfo.program)
         gl.viewport(0, 0, canvas.clientWidth, canvas.clientHeight)
@@ -200,7 +209,7 @@ function generateSphereStackVertices(numCircles = 120) {
 }
 
 //Generate sphere vertices
-function gsv(numSectors = 36, numStacks = 36, radius = 1.0) {
+function gsv(numSectors = 46, numStacks = 46, radius = 1.0) {
 
     let out = []
 

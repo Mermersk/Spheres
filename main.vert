@@ -31,7 +31,7 @@ Achieve this with: u_time - gl_VertexID!
 
 void main() {
 
-    gl_PointSize = 5.0;
+    gl_PointSize = 40.0;
    
     vec3 pos = a_position;
     v_inMotion = 0;
@@ -40,7 +40,7 @@ void main() {
     //float stopAnimating = startAnimating + 3.14;
 
     //Overlapping (multiple active at the same time)
-    float modTimer = mod(u_time, 16.0);
+    float modTimer = mod(u_time, 25.0);
     float startAnimating = float(gl_VertexID)/100.0;
     float stopAnimating = 3.14 + startAnimating;
     float uniqueVertTimer = ((modTimer) - startAnimating);
@@ -54,6 +54,9 @@ void main() {
     }
 
     v_pos = pos;
+    //if (pos.z > 0.5) {
+        //pos.z = 100.0;
+    //}
 
     gl_Position = u_projection * u_view * u_model * vec4(pos, 1.0);
 
